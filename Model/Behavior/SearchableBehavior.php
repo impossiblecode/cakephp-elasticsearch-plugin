@@ -220,7 +220,6 @@ class SearchableBehavior extends ModelBehavior {
 		$index_name = $this->opt($Model, 'index_name');
 		$type       = $this->opt($Model, 'type');
 
-
 		$primKeyPath  = $Model->alias . '/' . $Model->primaryKey;
 		$labelKeyPath = $Model->alias . '/' . $Model->displayField;
 		if (!empty($Model->labelField)) {
@@ -247,7 +246,7 @@ class SearchableBehavior extends ModelBehavior {
 			$sql = str_replace('{offset_limit_placeholder}', $sqlLimit, $sql);
 
 			if ($id !== null) {
-				$singleSql = 'AND `' . $Model->useTable . '`.`' . $Model->primaryKey . '` = "' . addslashes($id) . '"';
+				$singleSql = 'AND `' . $Model->alias . '`.`' . $Model->primaryKey . '` = "' . addslashes($id) . '"';
 				$sql = str_replace('{single_placeholder}', $singleSql, $sql);
 			} else {
 				$sql = str_replace('{single_placeholder}', '', $sql);
@@ -810,7 +809,7 @@ class SearchableBehavior extends ModelBehavior {
 		$this->settings[$Model->alias]['port'] = $DB['elastic']['port'];
 
 		//$this->settings[$Model->alias]['index_name'] = $this->opt($Model, 'index_name');
-		$this->settings[$Model->alias]['type'] = Inflector::underscore($Model->alias);
+		$this->settings[$Model->alias]['type'] = $Model->alias;//Inflector::underscore($Model->alias);
 	}
 
 	public function err ($Model, $format, $arg1 = null, $arg2 = null, $arg3 = null) {
